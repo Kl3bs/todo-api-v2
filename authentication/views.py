@@ -11,10 +11,14 @@ from authentication.serializers import UserSerializer
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import permissions
+
 
 
 
 @api_view(['POST'])
+#Allow post without authentication
+@permission_classes([permissions.AllowAny])
 def login(request):
 
     #Return an object, or raise an Http404 exception if the object does not exist.
@@ -31,6 +35,7 @@ def login(request):
 
 
 @api_view(['POST'])
+@permission_classes([permissions.AllowAny])
 def signup(request):
     serializer = UserSerializer(data=request.data)
 
@@ -53,5 +58,5 @@ def signup(request):
 @authentication_classes([TokenAuthentication, SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def test_token(request):
-    
+     
     return Response("Token is valid for {}".format(request.user.email), status=status.HTTP_200_OK)
